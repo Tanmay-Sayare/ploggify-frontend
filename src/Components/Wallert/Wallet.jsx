@@ -25,6 +25,7 @@ function Wallet() {
   useEffect(() => {
     // Check if the wallet is already connected on initial load
     const checkWalletConnection = async () => {
+      // Check for MetaMask connection
       if (typeof window.ethereum !== 'undefined') {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
@@ -35,6 +36,12 @@ function Wallet() {
           }));
           fetchAvailableTokens(accounts[0]);
         }
+      }
+
+      // Check for Diam wallet connection
+      if (window.diam) {
+        // Attempt to connect to Diam wallet
+        handleConnectDiamWallet(); // Corrected function name here
       }
     };
     checkWalletConnection();
@@ -64,6 +71,28 @@ function Wallet() {
       }
     } else {
       alert('Please install MetaMask!');
+    }
+  };
+
+  // Function to connect to Diam wallet
+  const handleConnectDiamWallet = () => {
+    if (window.diam) {
+      window.diam.connect()
+        .then((result) => {
+          const publicKey = result.message[0];
+          console.log(`User active public key is: ${publicKey}`);
+          setUserInfo((prevInfo) => ({
+            ...prevInfo,
+            walletAddress: publicKey,
+          }));
+          setIsConnected(true);
+          fetchAvailableTokens(publicKey); // Adjust this to fetch any specific tokens for Diam wallet if needed
+        })
+        .catch((error) => {
+          console.error(`Error connecting to Diam wallet: ${error}`);
+        });
+    } else {
+      alert('Please install the Diam Wallet extension!');
     }
   };
 
@@ -138,7 +167,8 @@ function Wallet() {
           )}
           {!isConnected && (
             <div className="button-group">
-              <button className="connect-button" onClick={handleConnectWallet}>Connect to Wallet</button>
+              <button className="connect-button" onClick={handleConnectWallet}>Connect to MetaMask</button>
+              <button className="connect-button" onClick={handleConnectDiamWallet}>Connect to Diam Wallet</button>
               <button className="create-button" onClick={handleCreateWallet}>Install Diam Wallet</button>
             </div>
           )}
