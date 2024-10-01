@@ -72,7 +72,7 @@
 
 .wallet-title {
   color: #00ffff;
-  font-size: 28px;
+  font-size: 50px;
   margin-bottom: 20px;
   text-align: center;
   text-shadow: 0 0 10px rgba(0,255,255,0.5);
@@ -89,7 +89,7 @@
 
 .info-section h2 {
   color: #00ffff;
-  font-size: 20px;
+  font-size: 30px;
   margin-bottom: 10px;
 }
 
@@ -115,7 +115,7 @@
 }
 
 button {
-  background: linear-gradient(145deg, #00ffff, #00cccc);
+  background: linear-gradient(145deg, #e73e3e, #00cccc);
   border: none;
   border-radius: 25px;
   color: #000000;
@@ -180,58 +180,6 @@ button:hover {
   box-shadow: 0 0 15px rgba(255,153,0,0.5);
 }
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(5px);
-}
-
-.popup-form {
-  background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(42, 42, 42, 0.9));
-  border-radius: 20px;
-  padding: 30px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 30px rgba(0,255,255,0.2);
-  border: 1px solid rgba(0, 255, 255, 0.1);
-}
-
-.popup-form h2 {
-  color: #00ffff;
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.popup-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: none;
-  border-radius: 25px;
-  background: rgba(255,255,255,0.1);
-  color: #ffffff;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.popup-form input::placeholder {
-  color: rgba(255,255,255,0.5);
-}
-
-.popup-form .button-group {
-  justify-content: flex-end;
-}
-
-.popup-form button {
-  margin-left: 10px;
-}
 
 @media (max-width: 480px) {
   .wallet-card {
@@ -243,11 +191,11 @@ button:hover {
   }
 
   .info-section h2 {
-    font-size: 18px;
+    font-size: 30px;
   }
 
   .token-amount {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   button {
