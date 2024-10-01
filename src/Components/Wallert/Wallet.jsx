@@ -32,11 +32,10 @@ function Wallet() {
     setAvailableTokens(100);
     setIsConnected(true);
     setShowForm(false);
-    alert(isEditMode ? 'Wallet Info Updated Successfully' : 'Wallet Connected Successfully');
   };
 
   const handleCreateWallet = () => {
-    window.location.href = 'https://play.google.com/store/apps/details?id=com.diamante.diamwallet';
+    window.open('https://chromewebstore.google.com/detail/diam-wallet/oakkognifoojdbfjaccegangippipdmn?hl=en', '_blank');
   };
 
   const handleInputChange = (e) => {
@@ -45,45 +44,46 @@ function Wallet() {
 
   return (
     <div className="wallet-container">
-      {/* User Info Container */}
-      <div className="user-info">
-        <h2>User Info</h2>
-        <p><strong>Name:</strong> {userInfo.name}</p>
-        <p><strong>Email:</strong> {userInfo.email}</p>
-        <p><strong>Wallet Address:</strong> {isConnected ? userInfo.walletAddress : 'Not connected'}</p>
-        {isConnected && (
-          <button onClick={handleEditWallet}>Edit Wallet Info</button>
-        )}
+      <div className="wallet-card">
+        <div className="glow-effect"></div>
+        <h1 className="wallet-title">Diam Wallet</h1>
+        
+        <div className="info-section user-info">
+          <h2>User Info</h2>
+          <p><strong>Name:</strong> <span>{userInfo.name}</span></p>
+          <p><strong>Email:</strong> <span>{userInfo.email}</span></p>
+          <p><strong>Wallet Address:</strong> <span>{isConnected ? userInfo.walletAddress : 'Not connected'}</span></p>
+          {isConnected && (
+            <button className="edit-button" onClick={handleEditWallet}>Edit Wallet Info</button>
+          )}
+        </div>
+
+        <div className="info-section wallet-info">
+          <h2>Wallet Info</h2>
+          <p><strong>Available Tokens:</strong> <span className="token-amount">{isConnected ? availableTokens : 'Not connected'}</span></p>
+          {!isConnected && (
+            <div className="button-group">
+              <button className="connect-button" onClick={handleConnectWallet}>Connect to Wallet</button>
+              <button className="create-button" onClick={handleCreateWallet}>Install Diam Wallet</button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Token Info Container */}
-      <div className="token-info">
-        <h2>Wallet Info</h2>
-        <p><strong>Available Tokens:</strong> {isConnected ? availableTokens : 'Not connected'}</p>
-        {!isConnected && (
-          <div>
-            <button onClick={handleConnectWallet}>Connect to Wallet</button>
-            <button onClick={handleCreateWallet}>Create a Wallet</button>
-          </div>
-        )}
-      </div>
-
-      {/* Popup Form */}
       {showForm && (
-        <div className="popup-form">
-          <div className="form-container">
+        <div className="popup-overlay">
+          <div className="popup-form">
             <h2>{isEditMode ? 'Edit Wallet Info' : 'Enter Wallet Info'}</h2>
-            <label>
-              Wallet Address:
-              <input
-                type="text"
-                value={walletInput}
-                onChange={handleInputChange}
-                placeholder="Enter your wallet address"
-              />
-            </label>
-            <button onClick={handleSaveWalletInfo}>{isEditMode ? 'Update' : 'Save'}</button>
-            <button onClick={() => setShowForm(false)}>Cancel</button>
+            <input
+              type="text"
+              value={walletInput}
+              onChange={handleInputChange}
+              placeholder="Enter your wallet address"
+            />
+            <div className="button-group">
+              <button onClick={handleSaveWalletInfo}>{isEditMode ? 'Update' : 'Save'}</button>
+              <button onClick={() => setShowForm(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       )}

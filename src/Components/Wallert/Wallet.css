@@ -1,85 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:global(body) {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+}
+
 .wallet-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.user-info, .token-info {
-  width: 45%;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #713ca0;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #5b2f82;
-}
-
-.popup-form {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.form-container {
-  background-color: white;
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 40, 83, 0.8) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 68, 103, 0.8) 0%, transparent 40%),
+    linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+  background-attachment: fixed;
   padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
-.form-container label {
+.wallet-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.1;
+  z-index: -1;
+  animation: backgroundScroll 60s linear infinite;
+}
+
+@keyframes backgroundScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+.wallet-card {
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.8), rgba(42, 42, 42, 0.8));
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 255, 0.2);
+  padding: 50px; /* Increased padding for more spacing inside the container */
+  width: 100%;
+  max-width: 600px; /* Made the card wider */
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+
+
+
+.glow-effect {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0) 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.wallet-title {
+  color: #00ffff;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.info-section {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 20px; /* Increased padding to add more spacing */
+  margin-bottom: 30px; /* Increased margin to add more space between sections */
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.info-section h2 {
+  color: #00ffff;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
-.form-container input {
-  margin-top: 5px;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  width: 100%;
+.info-section p {
+  color: #ffffff;
+  margin: 5px 0;
 }
 
-.form-container button {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #713ca0;
-  color: white;
+.info-section p strong {
+  color: #00ffff;
+}
+
+.token-amount {
+  font-size: 24px;
+  color: #00ff00;
+  text-shadow: 0 0 10px rgba(0,255,0,0.5);
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+button {
+  background: linear-gradient(145deg, #00ffff, #00cccc);
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
+  color: #000000;
   cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
 }
 
-.form-container button:hover {
-  background-color: #5b2f82;
+button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+  opacity: 0;
 }
 
-.form-container button:last-child {
-  background-color: #ccc;
+button:hover::before {
+  opacity: 1;
+  transform: rotate(45deg) translate(50%, 50%);
 }
 
-.form-container button:last-child:hover {
-  background-color: #aaa;
+button:hover {
+  background: linear-gradient(145deg, #00cccc, #00ffff);
+  box-shadow: 0 0 15px rgba(0,255,255,0.5);
 }
 
-/* Add space between buttons */
-.token-info button + button {
+.edit-button {
+  background: linear-gradient(145deg, #ff00ff, #cc00cc);
+}
+
+.edit-button:hover {
+  background: linear-gradient(145deg, #cc00cc, #ff00ff);
+  box-shadow: 0 0 15px rgba(255,0,255,0.5);
+}
+
+.connect-button {
+  background: linear-gradient(145deg, #00ff00, #00cc00);
+}
+
+.connect-button:hover {
+  background: linear-gradient(145deg, #00cc00, #00ff00);
+  box-shadow: 0 0 15px rgba(0,255,0,0.5);
+}
+
+.create-button {
+  background: linear-gradient(145deg, #ff9900, #cc7a00);
+}
+
+.create-button:hover {
+  background: linear-gradient(145deg, #cc7a00, #ff9900);
+  box-shadow: 0 0 15px rgba(255,153,0,0.5);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.popup-form {
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(42, 42, 42, 0.9));
+  border-radius: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.popup-form h2 {
+  color: #00ffff;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.popup-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.popup-form input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.popup-form .button-group {
+  justify-content: flex-end;
+}
+
+.popup-form button {
   margin-left: 10px;
+}
+
+@media (max-width: 480px) {
+  .wallet-card {
+    padding: 20px;
+  }
+
+  .wallet-title {
+    font-size: 24px;
+  }
+
+  .info-section h2 {
+    font-size: 18px;
+  }
+
+  .token-amount {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
 }
