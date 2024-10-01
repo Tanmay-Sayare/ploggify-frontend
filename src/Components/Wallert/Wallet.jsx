@@ -13,9 +13,28 @@ function Wallet() {
   const [walletInput, setWalletInput] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const handleConnectWallet = () => {
-    setShowForm(true);
-    setIsEditMode(false);
+  // Function to connect to MetaMask
+  const handleConnectWallet = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+
+        // Update user info with connected wallet address
+        setUserInfo((prevInfo) => ({
+          ...prevInfo,
+          walletAddress: account,
+        }));
+        setAvailableTokens(100); // Set a default value or fetch from your API
+        setIsConnected(true);
+        setShowForm(false);
+      } catch (error) {
+        console.error('Error connecting to wallet:', error);
+      }
+    } else {
+      alert('Please install MetaMask!');
+    }
   };
 
   const handleEditWallet = () => {
@@ -29,7 +48,7 @@ function Wallet() {
       ...userInfo,
       walletAddress: walletInput,
     });
-    setAvailableTokens(100);
+    setAvailableTokens(100); // Set a default value or fetch from your API
     setIsConnected(true);
     setShowForm(false);
   };
