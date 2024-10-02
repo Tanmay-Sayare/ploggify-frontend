@@ -203,3 +203,11 @@ button:hover {
     padding: 8px 16px;
   }
 }
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffeeee;
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
+}

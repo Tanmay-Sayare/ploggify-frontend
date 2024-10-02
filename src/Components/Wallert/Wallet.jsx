@@ -1,142 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import React, { useState, useCallback } from 'react';
 import './Wallet.css';
+import * as DiamNet from 'diamnet-sdk';
 
-function Wallet() {
+const Wallet = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
     walletAddress: '',
-    diamPublicKey: null, // Initialize diamPublicKey
+    diamPublicKey: '',
   });
   const [availableTokens, setAvailableTokens] = useState(0);
-  const [showForm, setShowForm] = useState(false);
-  const [walletInput, setWalletInput] = useState('');
-  const [isEditMode, setIsEditMode] = useState(false);
 
-  const tokenContractAddress = 'YOUR_TOKEN_CONTRACT_ADDRESS'; // Replace with your token contract address
-  const tokenDecimals = 18; // Replace with your token decimals if different
+  const connectWallet = useCallback(async () => {
+    try {
+      if (window.diam) {
+        console.log('Diam Wallet detected:', window.diam);
+        const response = await window.diam.connect();
+        console.log('Diam Wallet Response:', response);
 
-  // ERC-20 Token ABI for balanceOf function
-  const tokenABI = [
-    'function balanceOf(address owner) view returns (uint256)',
-  ];
-
-  useEffect(() => {
-    // Check if the wallet is already connected on initial load
-    const checkWalletConnection = async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          setIsConnected(true);
-          setUserInfo((prevInfo) => ({
-            ...prevInfo,
-            walletAddress: accounts[0],
-          }));
-          fetchAvailableTokens(accounts[0]);
+        if (response && response.status === 200 && response.message && response.message.length > 0) {
+          const walletInfo = response.message[0];
+          if (walletInfo.diamPublicKey) {
+            setUserInfo((prevInfo) => ({
+              ...prevInfo,
+              diamPublicKey: walletInfo.diamPublicKey,
+              walletAddress: walletInfo.diamPublicKey,
+            }));
+            setIsConnected(true);
+            await fetchBalance(walletInfo.diamPublicKey);
+          } else {
+            console.warn('Public key not found in the response:', walletInfo);
+          }
+        } else {
+          console.warn('Failed to get a valid wallet response:', response);
         }
-        // Check if Diam wallet is installed
-        if (window.diam) {
-          connectToDiamWallet(); // Call function to connect to Diam Wallet
-        }
+      } else {
+        alert('Diam Wallet is not available. Please install the extension.');
       }
-    };
-    checkWalletConnection();
+    } catch (error) {
+      console.error('Error connecting to Diam Wallet:', error);
+    }
   }, []);
 
-  // Function to connect to MetaMask
-  const handleConnectWallet = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        // Request account access
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const account = accounts[0];
-
-        // Update user info with connected wallet address
-        setUserInfo((prevInfo) => ({
-          ...prevInfo,
-          walletAddress: account,
-        }));
-
-        // Fetch available tokens in the wallet
-        await fetchAvailableTokens(account);
-
-        setIsConnected(true);
-        setShowForm(false);
-      } catch (error) {
-        console.error('Error connecting to wallet:', error);
-      }
-    } else {
-      alert('Please install MetaMask!');
+  const fetchBalance = async (publicKey) => {
+    try {
+      const server = new DiamNet.Server('https://horizon-testnet.diamnet.org');
+      const account = await server.loadAccount(publicKey);
+      const nativeBalance = account.balances.find(balance => balance.asset_type === 'native');
+      setAvailableTokens(nativeBalance ? parseFloat(nativeBalance.balance) : 0);
+    } catch (error) {
+      console.error('Error fetching balance:', error);
     }
   };
 
-  // Function to connect to Diam Wallet
-  const connectToDiamWallet = () => {
-    window.diam.connect()
-      .then((result) => {
-        console.log(`User active public key is: ${result.message[0]}`);
-        // Update userInfo with Diam public key
-        setUserInfo((prevInfo) => ({
-          ...prevInfo,
-          diamPublicKey: result.message[0], // Assuming message[0] contains the public key
-        }));
-      })
-      .catch((error) => {
-        console.error(`Error connecting to Diam Wallet: ${error}`);
-      });
-  };
-
-  // Function to disconnect the wallet
   const handleDisconnectWallet = () => {
     setIsConnected(false);
-    setUserInfo((prevInfo) => ({
-      ...prevInfo,
-      walletAddress: '',
-      diamPublicKey: null, // Clear the Diam public key on disconnect
-    }));
-    setAvailableTokens(0);
-    setShowForm(false); // Close the form if it's open
-  };
-
-  // Function to fetch available tokens in the wallet
-  const fetchAvailableTokens = async (account) => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const tokenContract = new ethers.Contract(tokenContractAddress, tokenABI, provider);
-      
-      // Call the balanceOf function to get the token balance
-      const balance = await tokenContract.balanceOf(account);
-      
-      // Convert balance from BigNumber to a float format
-      const formattedBalance = parseFloat(ethers.utils.formatUnits(balance, tokenDecimals));
-      setAvailableTokens(formattedBalance);
-    } catch (error) {
-      console.error('Error fetching token balance:', error);
-    }
-  };
-
-  const handleEditWallet = () => {
-    setShowForm(true);
-    setWalletInput(userInfo.walletAddress);
-    setIsEditMode(true);
-  };
-
-  const handleSaveWalletInfo = () => {
     setUserInfo({
-      ...userInfo,
-      walletAddress: walletInput,
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      walletAddress: '',
+      diamPublicKey: '',
     });
-    setShowForm(false);
+    setAvailableTokens(0);
   };
 
   const handleCreateWallet = () => {
     window.open('https://chromewebstore.google.com/detail/diam-wallet/oakkognifoojdbfjaccegangippipdmn?hl=en', '_blank');
-  };
-
-  const handleInputChange = (e) => {
-    setWalletInput(e.target.value);
   };
 
   return (
@@ -153,18 +83,21 @@ function Wallet() {
 
         <div className="info-section wallet-info">
           <h2>Wallet Info</h2>
-          <p><strong>Wallet Address:</strong> <span>{isConnected ? userInfo.walletAddress : 'Not connected'}</span></p>
-          <p><strong>Available Tokens:</strong> <span className="token-amount">{isConnected ? availableTokens.toFixed(4) : 'Not connected'}</span></p>
-          {isConnected && userInfo.diamPublicKey && (
-            <p><strong>Diam Public Key:</strong> <span>{userInfo.diamPublicKey}</span></p>
-          )}
+          <p><strong>Status:</strong> {isConnected ? 'Connected' : 'Not Connected'}</p>
+
           {isConnected && (
-            <button className="disconnect-button" onClick={handleDisconnectWallet}>Disconnect Wallet</button>
+            <>
+              <p><strong>Wallet Address:</strong> {userInfo.walletAddress}</p>
+              <p><strong>Diam Public Key:</strong> {userInfo.diamPublicKey}</p>
+              <p><strong>Available Tokens:</strong> <span className="token-amount">{availableTokens.toFixed(4)}</span></p>
+            </>
           )}
-          {!isConnected && (
+
+          {isConnected ? (
+            <button className="disconnect-button" onClick={handleDisconnectWallet}>Disconnect Wallet</button>
+          ) : (
             <div className="button-group">
-              <button className="connect-button" onClick={handleConnectWallet}>Connect to MetaMask</button>
-              <button className="connect-button" onClick={connectToDiamWallet}>Connect to Diam Wallet</button>
+              <button className="connect-button" onClick={connectWallet}>Connect to Diam Wallet</button>
               <button className="create-button" onClick={handleCreateWallet}>Install Diam Wallet</button>
             </div>
           )}
@@ -172,6 +105,6 @@ function Wallet() {
       </div>
     </div>
   );
-}
+};
 
 export default Wallet;
