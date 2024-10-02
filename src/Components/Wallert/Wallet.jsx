@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import './Wallet.css';
-import * as DiamNet from 'diamnet-sdk';
 
 const Wallet = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -11,6 +10,7 @@ const Wallet = () => {
     diamPublicKey: '',
   });
   const [availableTokens, setAvailableTokens] = useState(0);
+  const [error, setError] = useState('');
 
   const connectWallet = useCallback(async () => {
     try {
@@ -45,12 +45,19 @@ const Wallet = () => {
 
   const fetchBalance = async (publicKey) => {
     try {
-      const server = new DiamNet.Server('https://horizon-testnet.diamnet.org');
-      const account = await server.loadAccount(publicKey);
-      const nativeBalance = account.balances.find(balance => balance.asset_type === 'native');
+      // Fetch the account balance using the API
+      const response = await fetch(`https://diamtestnet.diamcircle.io/accounts/${publicKey}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const accountData = await response.json();
+      
+      // Find the native balance (assuming the asset is XDM)
+      const nativeBalance = accountData.balances.find(balance => balance.asset_type === 'native');
       setAvailableTokens(nativeBalance ? parseFloat(nativeBalance.balance) : 0);
     } catch (error) {
       console.error('Error fetching balance:', error);
+      setError('Failed to fetch balance. Please check the console for more details.');
     }
   };
 
@@ -101,6 +108,7 @@ const Wallet = () => {
               <button className="create-button" onClick={handleCreateWallet}>Install Diam Wallet</button>
             </div>
           )}
+          {error && <p className="error-message">{error}</p>}
         </div>
       </div>
     </div>
