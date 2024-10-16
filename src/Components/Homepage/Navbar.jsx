@@ -28,7 +28,7 @@ function Navbar() {
   };
 
   const openTelegram = () => {
-    window.open("https://telegram.org", "_blank");
+    window.open("https://t.me/B_54Bot/miniRPS", "_blank");
   };
 
   return (
